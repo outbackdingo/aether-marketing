@@ -1,0 +1,38 @@
+name: claim-check
+
+# The GlacierAI page once carried figures its own validation audit had withdrawn,
+# and nothing caught it for three days. This runs on every change so it cannot
+# recur silently.
+#
+# The ledger in .github/claim-tools/ is vendored from ~/aether-posts/tools.
+# If that ever becomes a repo, replace the vendored copy with a fetch so there
+# is one source of truth instead of three.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  claims:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Lint the built pages against the claim ledger
+        env: { NO_COLOR: "1" }
+        run: |
+          # Next.js emits .next/server/app/*.html; Astro emits dist/**/*.html.
+          pages=$(find .next/server/app dist -name '*.html' 2>/dev/null | grep -v 404 || true)
+          if [ -z "$pages" ]; then
+            echo "::error::no built HTML found — did the build change its output directory?"
+            exit 1
+          fi
+          echo "$pages" | sed 's/^/  /'
+          python3 .github/claim-tools/claim-lint.py $pages

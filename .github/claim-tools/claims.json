@@ -1,0 +1,126 @@
+{
+  "_comment": [
+    "The claim ledger, as data. 10-launch-brief.md is the human-readable version;",
+    "this is what claim-lint.py enforces. Keep the two in step.",
+    "",
+    "red    — must never appear in published copy. Hard fail.",
+    "amber  — may appear only with a qualifier nearby. Fail if the qualifier is missing.",
+    "figures— canonical values. Fail if the copy states a different number for the same fact.",
+    "",
+    "'exempt' lists files where a pattern is allowed because the file is *about* the",
+    "prohibition (the brief's own red list, this file, the linter itself)."
+  ],
+  "exempt": [
+    "10-launch-brief.md",
+    "claims.json",
+    "claim-lint.py",
+    "README.md"
+  ],
+  "red": [
+    {
+      "id": "chamoli-precursor",
+      "pattern": "(?i)precursor[^.]{0,80}chamoli|chamoli[^.]{0,80}precursor",
+      "why": "Withdrawn by findings-15. The signal was an M6.0 in Mindanao 28 min before the collapse.",
+      "allow_if_near": "(?i)withdrew|withdrawn|retract|audit traced|did not hold|earlier version"
+    },
+    {
+      "id": "recall-rate",
+      "pattern": "(?i)\\b100\\s*%[^.]{0,40}(recall|detect|collapse|event)|(recall|detection rate)[^.]{0,40}\\b100\\s*%|\\bcollapse recall\\b",
+      "why": "results-07 withdrawn. No recall figure survives the audit."
+    },
+    {
+      "id": "false-alarm-rate",
+      "pattern": "(?i)\\bfalse alarms?\\b|\\b0\\s*%[^.]{0,30}alarm",
+      "why": "results-07 withdrawn. No false-alarm rate survives the audit."
+    },
+    {
+      "id": "rasuwa-gap",
+      "pattern": "(?i)38[- ]min|38 minutes",
+      "why": "findings-14 withdrawn."
+    },
+    {
+      "id": "himalaya-validated",
+      "pattern": "(?i)validated[^.]{0,60}(himalaya|hkh|nepal|india)|(himalaya|hkh)[^.]{0,40}validat",
+      "why": "Both validated events are European. Himalayan near-field records are not on open FDSN."
+    },
+    {
+      "id": "field-deployed",
+      "pattern": "(?i)(deployed|monitoring|watching|installed)[^.]{0,50}(glacier|valley|mountain|face)(?![^.]{0,60}(not yet|no node|never))",
+      "why": "No node is on a mountain. Production holds glacier-node-001..004 from one bench day.",
+      "allow_if_near": "(?i)not yet|no node|never|bench|when they are"
+    },
+    {
+      "id": "onvif-matter",
+      "pattern": "(?i)\\b(aether|the platform|the controller)\\b[^.]{0,80}\\bonvif\\b|\\bonvif\\b[^.]{0,60}\\b(adapter|aether|supported)\\b|Matter\\s*(/|\\s)\\s*Thread|Matter\\s+(fabric|protocol|commissioning|support)",
+      "why": "ADR-005 phases 3 and 4 — not built. (Optim's camera FIRMWARE business does ONVIF; that is not Aether managing ONVIF devices.)"
+    },
+    {
+      "id": "battery-life",
+      "pattern": "(?i)\\d+\\s*(months?|years?)[^.]{0,30}(battery|charge|deep sleep)|(battery|deep sleep)[^.]{0,30}\\d+\\s*months?",
+      "why": "Firmware has never been compiled with classify_event() implemented. Design target only."
+    }
+  ],
+  "amber": [
+    {
+      "id": "detect-to-siren",
+      "pattern": "(?i)<\\s*60\\s*s|sub-minute|under a minute",
+      "requires": "(?i)design target|target|not a measurement",
+      "window": 220,
+      "why": "Design target, not measured."
+    },
+    {
+      "id": "microamp-sleep",
+      "pattern": "(?i)\\d+\\s*(µA|uA|microamp)",
+      "requires": "(?i)design target|target",
+      "window": 220,
+      "why": "Target deep-sleep current from node_config.h, never measured on built firmware."
+    },
+    {
+      "id": "sub-2km",
+      "pattern": "(?i)<\\s*2\\s*km|sub-2\\s*km",
+      "requires": "(?i)would|denser|could|with more stations",
+      "window": 220,
+      "why": "What denser geometry would give, not what has been measured."
+    },
+    {
+      "id": "precursor-word",
+      "pattern": "(?i)\\bprecursor\\b",
+      "requires": "(?i)research question|research only|research track|not a product|not predictive|withdrew|withdrawn|no precursor|found nothing|did not hold",
+      "window": 300,
+      "why": "Precursor detection is a research track. Never a product claim."
+    }
+  ],
+  "figures": [
+    {
+      "id": "glacier-distances",
+      "context": "(?i)bondo|blatten|glacier|geolocat|triangulat|near-field",
+      "extract": "(\\d+(?:\\.\\d+)?)\\s*km",
+      "allowed": [
+        "6.5",
+        "8.4",
+        "10.0",
+        "11",
+        "14",
+        "23",
+        "24",
+        "32",
+        "42",
+        "2",
+        "12",
+        "13"
+      ],
+      "why": "Validation distances only: Bondo 6.5 km located (8.4 superseded), 32 km best station, 24-42 km range, 23 km precursor scan; Blatten 10.0 km located, 11 km best station, 11-14 km range.",
+      "near": "(?i)bondo|blatten",
+      "near_window": 170
+    }
+  ],
+  "required_parts": {
+    "_comment": "If copy names the device BOM at all, these are the only correct part numbers.",
+    "mcu": "STM32WL55JC",
+    "radar": "BGT60TR13C",
+    "accel": "ADXL355",
+    "gnss": "NEO-M8N",
+    "secure_element": "ATECC608A",
+    "charger": "TP4056"
+  }
+}
