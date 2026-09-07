@@ -490,6 +490,95 @@ import Layout from '../layouts/Layout.astro';
   </div>
 </section>
 
+<!-- ═══ IoT & SENSOR NETWORKS ═══════════════════════════════════ -->
+<section id="iot">
+  <div class="page">
+    <div class="tag tag-cyan">IoT &amp; Sensor Networks</div>
+    <h2>Not every managed device<br><span class="gradient-text">is a router.</span></h2>
+    <p style="margin-top:20px; color:var(--text-secondary); max-width:700px; font-size:1rem; line-height:1.7;">
+      A sensor on a mountainside, a camera event, a Zigbee hub in a living room and a subscriber&rsquo;s
+      access point are all just devices with identity, health and telemetry. Aether onboards them through
+      the same control plane, into the same device list, under the same tenancy and audit rules — so an
+      operator does not buy a second platform to manage the things that are not access points.
+    </p>
+    <div class="tech-grid" style="margin-top:48px;">
+      <div class="tech-card" style="border-top-color:#22d3ee">
+        <div class="tech-label" style="color:#22d3ee">Shipped</div>
+        <div class="tech-name">Generic MQTT ingest</div>
+        <div class="tech-desc">Topic patterns map to a device serial and a tenant; the payload lands in device telemetry and the device appears in the unified list. One adapter covers purpose-built sensors, camera events, and Zigbee or Z-Wave behind a zigbee2mqtt bridge.</div>
+      </div>
+      <div class="tech-card" style="border-top-color:#0ea5e9">
+        <div class="tech-label" style="color:#0ea5e9">Shipped</div>
+        <div class="tech-name">LwM2M over CoAP</div>
+        <div class="tech-desc">Registration, update and deregistration; read, write and execute on objects and resources; observe and notify into telemetry. IPSO sensor objects supported. Gated on a live wakaama client registering in-cluster, not on a unit test.</div>
+      </div>
+      <div class="tech-card" style="border-top-color:#8b5cf6">
+        <div class="tech-label" style="color:#8b5cf6">Scope</div>
+        <div class="tech-name">Control plane, not media plane</div>
+        <div class="tech-desc">Aether onboards a camera, holds its credentials and brokers access to its stream URL. It never terminates the stream. Video belongs in a media server, and a management platform that pretends otherwise becomes a bandwidth bill.</div>
+      </div>
+      <div class="tech-card" style="border-top-color:#10b981">
+        <div class="tech-label" style="color:#10b981">Discipline</div>
+        <div class="tech-name">No invented readings</div>
+        <div class="tech-desc">No adapter may present fabricated device or telemetry data. A sensor that has not reported shows as silent, not as zero — the distinction matters when someone is deciding whether to evacuate a valley.</div>
+      </div>
+    </div>
+
+    <!-- GlacierAI — the flagship IoT deployment -->
+    <div class="card" style="margin-top:56px; border-color:rgba(34,211,238,0.35); background:linear-gradient(135deg, rgba(34,211,238,0.05), rgba(139,92,246,0.05));">
+      <div class="grid-2col-wide" style="margin-top:0;">
+        <div>
+          <div class="tag tag-cyan" style="margin-bottom:20px;">Flagship deployment</div>
+          <h3 style="font-size:1.75rem; letter-spacing:-0.03em; margin:0 0 18px;">
+            GlacierAI &mdash; <span class="gradient-text">early warning for glacial hazards</span>
+          </h3>
+          <p style="color:var(--text-secondary); font-size:0.98rem; line-height:1.75;">
+            Himalayan glacial lake outburst floods and ice-rock collapses arrive with minutes of warning,
+            in valleys that cross national borders. GlacierAI puts a purpose-built solar sensor node on the
+            face itself &mdash; seismic, 60&nbsp;GHz surface radar and GNSS on one board, with a secure element
+            holding the per-node key &mdash; and Aether is the platform behind it.
+          </p>
+          <p style="color:var(--text-secondary); font-size:0.98rem; line-height:1.75; margin-top:16px;">
+            Nodes publish over MQTT on mutual TLS. Aether ingests, stores, correlates across stations,
+            triangulates the source from arrival times, and routes the alert to civil authorities on both
+            sides of a border &mdash; with an audit record of who was told and when. This is the whole IoT
+            path in production, not a slide: ingest, storage, alert routing, API and dashboard.
+          </p>
+          <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:28px;">
+            <a href="https://optimcloud.com/glacier" class="btn btn-primary">The GlacierAI project</a>
+            <a href="/#protocols" class="btn btn-outline">Protocol coverage</a>
+          </div>
+        </div>
+        <div>
+          <div class="card-grid-2" style="gap:20px;">
+            <div>
+              <div class="stat-num" style="font-size:2.1rem;">3</div>
+              <div class="stat-label">sensing channels in one telemetry frame &mdash; radar, GNSS, seismic</div>
+            </div>
+            <div>
+              <div class="stat-num" style="font-size:2.1rem;">QoS&nbsp;2</div>
+              <div class="stat-label">exactly-once on the alert topic; a siren must not be missed, or fire twice</div>
+            </div>
+            <div>
+              <div class="stat-num" style="font-size:2.1rem;">&ge;3</div>
+              <div class="stat-label">stations to report a triangulated fix &mdash; below that it is labelled a baseline, never dressed as one</div>
+            </div>
+            <div>
+              <div class="stat-num" style="font-size:2.1rem;">693&nbsp;B</div>
+              <div class="stat-label">crosses a border &mdash; derived alert fields only, never raw waveforms</div>
+            </div>
+          </div>
+          <p style="color:var(--text-secondary); font-size:0.84rem; line-height:1.65; margin-top:24px; padding-top:20px; border-top:1px solid var(--aether-border);">
+            Status: the ingest-to-alert path runs in production and is proven end to end against the
+            firmware&rsquo;s real wire format. Field nodes are not yet deployed on a mountain &mdash; when they
+            are, we will say where.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══ PARENTAL CONTROLS / DPI ════════════════════════════════ -->
 <section id="protect">
   <div class="page">
